@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
     res.redirect(`/users/dashboard/:${req.session.username}`);
 else if(req.session.username && req.session.role=="admin")
 res.redirect(`/admin/dashboard/:${req.session.username}`);
-  else res.render('login');
+  else res.render('login',{message:""});
 });
 
 //* log-in
@@ -69,7 +69,7 @@ app.get("/login", (req, res) => {
     res.redirect(`/users/dashboard/:${req.session.username}`);
 else if(req.session.username && req.session.role=="admin")
 res.redirect(`/admin/dashboard/:${req.session.username}`);
-  else res.render('login');
+  else res.render('login',{message:""});
 });
 
 //* user and admin login authorization
@@ -87,7 +87,7 @@ app.post("/login", (req, res) => {
         )
           return true;
       });
-      if (results.length == 0) res.send("Invalid user/password");
+      if (results.length == 0) res.render('login',{message:"Invalid Username/Password"});
       else {
         req.session.username = req.body.username;
         req.session.role = req.body.role;
@@ -107,7 +107,7 @@ app.post("/login", (req, res) => {
         )
           return true;
       });
-      if (results.length == 0) res.send("Invalid user/password");
+      if (results.length == 0) res.render('login',{message:"Invalid Username/password"});
       else {
            req.session.username=req.body.username;
            req.session.role=req.body.role;

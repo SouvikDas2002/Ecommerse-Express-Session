@@ -3,6 +3,8 @@ const app = express();
 const PORT=3000;
 const fs = require("fs");
 const path = require("path");
+const login=require("./login");
+const signup=require('./signup');
 const cookieparser = require("cookie-parser");
 const session = require("express-session");
 app.use(cookieparser());
@@ -14,7 +16,7 @@ app.set("view engine","ejs")
 //express-session
 //cookie-parser
 
-// *session management
+// session management
 
 app.use(
   session({
@@ -33,169 +35,58 @@ const adminRoute = require("./router/adminRoutes");
 app.use("/users", auth, userRoute);  //user route
 app.use("/admin", auth, adminRoute); //admin route
 
+//session-authentication
 function auth(req, res, next) {
-  if (req.session.username)
+  if (req.session.email)
   next();
-  else res.redirect("/");
+else res.redirect("/");
 }
-
-// app.get("/dashboard.html", (req, res) => {
-//   res.redirect(`/users/dashboard/:${req.session.username}`);
-// });
 
 // app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-
 //logout
-
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/login");
 });
 
-app.get("/", (req, res) => {
-    if (req.session.username && req.session.role=="user")
-    res.redirect(`/users/dashboard/:${req.session.username}`);
-else if(req.session.username && req.session.role=="admin")
-res.redirect(`/admin/dashboard/:${req.session.username}`);
-  else res.render('login',{message:""});
-});
+// log-in
 
-//* log-in
+app.use("/", login);
 
-app.get("/login", (req, res) => {
-  if (req.session.username && req.session.role=="user")
-    res.redirect(`/users/dashboard/:${req.session.username}`);
-else if(req.session.username && req.session.role=="admin")
-res.redirect(`/admin/dashboard/:${req.session.username}`);
-  else res.render('login',{message:""});
-});
+//signup
+app.use('/signup',signup);
 
-//* user and admin login authorization
+// Update password
 
-app.post("/login", (req, res) => {
-//   console.log(req.body.role);
-  if (req.body.role != "user") {
-    fs.readFile("admin.txt", "utf-8", (err, data) => {
-      let records = JSON.parse(data);
-      let results = records.filter((item) => {
-        if (
-          item.username == req.body.username &&
-          item.password == req.body.password &&
-          item.role == req.body.role
-        )
-          return true;
-      });
-      if (results.length == 0) res.render('login',{message:"Invalid Username/Password"});
-      else {
-        req.session.username = req.body.username;
-        req.session.role = req.body.role;
-        console.log("role "+req.session.role);
-        res.redirect(`/admin/dashboard/:${req.session.username}`);
-        // res.send("hii admin")
-      }
-    });
-  } else if(req.body.role=="user"){
-    fs.readFile("users.txt", "utf-8", (err, data) => {
-      let records = JSON.parse(data);
-      let results = records.filter((item) => {
-        if (
-          item.username == req.body.username &&
-          item.password == req.body.password &&
-          item.role==req.body.role
-        )
-          return true;
-      });
-      if (results.length == 0) res.render('login',{message:"Invalid Username/password"});
-      else {
-           req.session.username=req.body.username;
-           req.session.role=req.body.role;
-           console.log("role "+req.session.role);
-        res.redirect(`/users/dashboard/:${req.session.username}`)
-        // res.send("welcome user");
-      }
-    });
+app.get('/changepwd',(req,res)=>{
+  res.render('changepwd');
+})
+app.post('/changepwd',(req,res)=>{
+  if(req.body.newPass==req.body.conPass){
+    console.log(req.body);
   }
-});
+  res.end();
+})
 
-//*sign-up authorization for user and admin
+// single product details
 
-app.get("/signup", (req, res) => {
-  res.render('signUp');
-});
+app.get('/productdetails/:id',(req,res)=>{
+  console.log(req.params.id);
+  fs.readFile('products.json','utf-8',(err,data)=>{
 
-app.post("/signup", (req, res) => {
-  // console.log(req.body);
-
-  if(req.body.role=="user"){
-  fs.readFile("users.txt", "utf-8", (err, data) => {
-    // console.log(data);
-    let newUser;
-    let oldrecord;
-    if (data == "") {
-      oldrecord = [];
-    } else {
-      oldrecord = JSON.parse(data);
-    }
-
-    //* checking user exist or not
-    let results = oldrecord.filter((item) => {
-      if (item.username == req.body.username && item.password == req.body.password && item.role == req.body.role)
-        return true;
-      else return false;
-    });
-    // console.log(results.length);
-    if (results.length!=0) {
-      console.log("user already present please login");
-    }
-    else{
-    newUser = oldrecord;
-    newUser.push(req.body);
-
-    // console.log(newUser);
-    fs.writeFile("users.txt", JSON.stringify(newUser), (err) => {
-      if (err) throw err;
-      else console.log(`user signUp successful`);
-    });
-}
-  });
-  res.redirect('/login');
-}
-else{
-    fs.readFile("admin.txt", "utf-8", (err, data) => {
-        // console.log(data);
-        let newUser;
-        let oldrecord;
-        if (data == "") {
-          oldrecord = [];
-        } else {
-          oldrecord = JSON.parse(data);
-        }
-        // * checking admin exist or not
-        let results = oldrecord.filter((item) => {
-          if (item.username == req.body.Name && item.password == req.body.pass)
-            return true;
-          else return false;
-        });
-        // console.log(results.length);
-        if (results.length!=0) {
-          console.log("user already present please login");
-        }
-        else{
-        newUser = oldrecord;
-        newUser.push(req.body);
+    let products=JSON.parse(data);
+    let single=products.filter(item=>{
+      if(item.id==req.params.id)
+      return 1;
+    })
     
-        // console.log(newUser);
-        fs.writeFile("admin.txt", JSON.stringify(newUser), (err) => {
-          if (err) throw err;
-          else console.log(`admin signUp successful`);
-        });
-    }
-      });
-      res.redirect('/login');
-}
-});
+    console.log(single);
+    console.log(single[0].name);
+    res.render('productdetails',{detail:single});
+  })
+})
 
 app.listen(PORT, (err) => {
   console.log(`Server running on port number ${PORT}`);

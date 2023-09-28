@@ -1,0 +1,42 @@
+[
+    {
+    "id":1,
+    "name":"This is first product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":2,
+    "name":"This is second product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":3,
+    "name":"This is third product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":4,
+    "name":"This is forth product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":5,
+    "name":"This is fifth product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":6,
+    "name":"This is sixth product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":7,
+    "name":"This is seventh product",
+    "img":"https://picsum.photos/100/250"
+    },
+    {
+    "id":8,
+    "name":"This is ninth product",
+    "img":"https://picsum.photos/100/250"
+    }
+]

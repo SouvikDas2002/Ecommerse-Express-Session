@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<%- include('./partials/header') %>
+<body>
+    <header >
+        <nav class="navbar navbar-expand-lg navbar-light bg-light position-fixed overflow-hidden" style="width: 100%">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand ms-4 fw-bold" href="#">Shop Site</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
+              </li>
+              
+            </ul>
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0 me-4" >
+                <li class="nav-item active">
+                  <a class="nav-link" href="/admin/productadd">All Products<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="/admin/profile">Profile<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="/admin/profile">About<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="/admin/profile">Help<span class="sr-only"></span></a>
+                </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/logout">Logout<span class="sr-only"></span></a>
+              </li>
+              
+            </ul>
+           
+         
+          </div>
+        </nav>
+        </header>
+
+
+    <div class="pt-5" style="display: flex;justify-content: space-around;">
+        <div>
+    <h2 class="mt-4">Add Product</h2>
+    <form action="/admin/productadd" method="post" class="form-control">
+      Product Serial Number :
+      <input class="mt-4" type="number" name="id" placeholder="Product number"><br><br>
+      Product Name :
+      <input type="text" name="name" placeholder="Product name"><br><br>
+      Product Price :
+      <input type="number" name="price" placeholder="Product price /-"><br><br>
+      Details :
+        <textarea name="details" cols="30" rows="5" placeholder="About product"></textarea><br><br>
+        Product Image<br><br>
+        <input type="file" name="productimage">
+        <input type="submit" class="mb-4 bg-primary btn text-white ">
+    </form>
+    </div>
+    <div>
+    <h2 class="mt-4">Update Product</h2>
+    <form action="/admin/productupdate" method="post" class="form-control">
+      Product Serial Number :
+      <input class="mt-4" type="number" name="id" placeholder="Product number"><br><br>
+      Product Name :
+      <input type="text" name="name" placeholder="Product name"><br><br>
+      Product Price :
+      <input type="number" name="price" placeholder="Product price /-"><br><br>
+      Details :
+        <textarea name="details" cols="30" rows="5" placeholder="about product"></textarea><br><br>
+        Product Image<br><br>
+        <input type="file" name="productimage">
+        <input type="submit" class="mb-4 bg-primary btn text-white ">
+    </form>
+    </div>
+    <div>
+      <h2 class="mt-4">Delete Product</h2>
+      <form action="/admin/productdelete" method="post" class="form-control">
+        Product Serial Number :
+          <input class="mt-4" type="number" name="id" placeholder="Product number"><br><br>
+
+          <input type="submit" class="mb-4 bg-primary btn text-white ">
+      </form>
+      </div>
+    </div>
+</body>
+</html>

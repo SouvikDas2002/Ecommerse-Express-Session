@@ -11,9 +11,8 @@ route.get("/dashboard/:x",(req,res)=>{
         // console.log(data);
         res.render("dashboard",{products:JSON.parse(data)});
     })
-
-
 })
+
 route.get("/profile",(req,res)=>{
     // res.sendFile(path.join(__dirname,"../public/dashboard.html"));
     res.send("user profile page");

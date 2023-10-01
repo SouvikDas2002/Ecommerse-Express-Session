@@ -72,6 +72,7 @@ app.post('/changepwd',(req,res)=>{
 
 // single product details
 
+
 app.get('/productdetails/:id',(req,res)=>{
   console.log(req.params.id);
   fs.readFile('products.json','utf-8',(err,data)=>{

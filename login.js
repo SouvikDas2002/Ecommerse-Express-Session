@@ -40,7 +40,7 @@ login.post("/login", async(req, res) => {
             req.session.email=req.body.email;
                req.session.role=req.body.role;
                console.log("role "+req.session.role);
-            res.redirect(`/admin/dashboard/:${req.session.email}`)
+            res.redirect(`/admin/dashboard/${req.session.email}`)
           }
           else {
             res.render('login');
@@ -64,7 +64,7 @@ login.post("/login", async(req, res) => {
             req.session.email=req.body.email;
                req.session.role=req.body.role;
                console.log("role "+req.session.role);
-            res.redirect(`/users/dashboard/:${req.session.email}`)
+            res.redirect(`/users/dashboard/${req.session.email}`)
           }
           else {
             res.render('login');

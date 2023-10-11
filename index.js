@@ -3,12 +3,15 @@ const app = express();
 const PORT=3000;
 const fs = require("fs");
 const path = require("path");
+let data=require('./mongodb/connection');
 const login=require("./login");
 const signup=require('./signup');
 const cookieparser = require("cookie-parser");
 const session = require("express-session");
 app.use(cookieparser());
 const oneday = 1000 * 60 * 60 * 24;
+
+
 
 app.set("view engine","ejs")
 
@@ -32,8 +35,8 @@ app.use(
 const userRoute = require("./router/userRoutes");
 const adminRoute = require("./router/adminRoutes");
 
-app.use("/users", auth, userRoute);  //user route
-app.use("/admin", auth, adminRoute); //admin route
+app.use("/users", userRoute);  //user route
+app.use("/admin", adminRoute); //admin route
 
 //session-authentication
 function auth(req, res, next) {
@@ -55,6 +58,7 @@ app.get("/logout", (req, res) => {
 
 app.use("/", login);
 
+
 //signup
 app.use('/signup',signup);
 
@@ -73,20 +77,27 @@ app.post('/changepwd',(req,res)=>{
 // single product details
 
 
-app.get('/productdetails/:id',(req,res)=>{
-  console.log(req.params.id);
-  fs.readFile('products.json','utf-8',(err,data)=>{
+app.get('/productdetails/:id',async(req,res)=>{
+  // console.log(req.params.id);
+  // fs.readFile('products.jso','utf-8',(err,data)=>{
 
-    let products=JSON.parse(data);
-    let single=products.filter(item=>{
-      if(item.id==req.params.id)
-      return 1;
-    })
-    
-    console.log(single);
-    console.log(single[0].name);
+  //   let products=JSON.parse(data);
+  //   let single=products.filter(item=>{
+  //     if(item.id==req.params.id)
+  //     return 1;
+  //   })
+  //   res.render('productdetails',{detail:single});
+  // })
+  let single=await data.collection('products').find({"id":req.params.id}).toArray();
     res.render('productdetails',{detail:single});
-  })
+  // console.log(single);
+})
+
+data(function(res){
+  if(data)
+  data=res;
+else
+console.log("got some issue");
 })
 
 app.listen(PORT, (err) => {
